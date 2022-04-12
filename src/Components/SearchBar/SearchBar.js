@@ -19,6 +19,7 @@ export default class SearchBar extends Component {
   search() {
     this.props.onSearch(this.state.term)
   }
+  
   render() {
     console.log()
     return (

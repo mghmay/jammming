@@ -1,5 +1,28 @@
+/*
+This app recieves search results from the client and sends them to spotify, it then returns
+these results which the user can select to add to a playlist. The user can then post the playlist
+to their spotify account.
+
+The layout of the app looks something like this:
+
+                              index.js
+                                |
+                              app.js
+                            /   |    \
+                          /     |      \
+                searchbar searchresults  playlist
+                                 \       |
+                                  \      |
+                                  tracklist
+                                      |
+                                    tracks 
+
+
+*/
+
 import React, { Component } from 'react';
 import './App.css';
+
 import SearchBar from '../SearchBar/SearchBar'
 import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist';
@@ -11,31 +34,10 @@ export default class App extends Component {
 
     this.state = {
       searchResults: [],
-      playlistName: 'example playlist name',
-      playlistTracks: [
-        {
-          name: 'example tracks 10',
-          artist: 'example artist 10',
-          album: 'example album 10',
-          id: 23456,
-          uri: 'spotify:track:6rqhFgbbKwnb9MLmUQDhG6'
-        },
-        {
-          name: 'example tracks 20',
-          artist: 'example artist 20',
-          album: 'example album 20',
-          id: 34567,
-          uri: 'spotify:track:6rqhFgbbKwnb9MLmUQgrt6'
-        },
-        {
-          name: 'example tracks 30',
-          artist: 'example artist 30',
-          album: 'example album 30',
-          id: 45678,
-          uri: 'spotify:track:6rqhFgbbKwnb9MLmUQtry7'
-        }
-      ]
+      playlistName: 'New Playlist',
+      playlistTracks: []
     }
+
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
     this.updatePlaylistName = this.updatePlaylistName.bind(this);
