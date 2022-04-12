@@ -1,5 +1,5 @@
 const clientID = '71f1f3daefe64e5fadfc2efb9e38536d';
-const redirectURI = 'insidious-force.surge.sh';
+const redirectURI = 'https://www.insidious-force.surge.sh';
 let accessToken;
 
 const Spotify = {
