@@ -86,7 +86,8 @@ export default class App extends Component {
   }
 
   search(term) {
-    console.log(term);
+     const response = Spotify.search(term);
+     this.setState({searchResults: response})
   }
 
   render () {
