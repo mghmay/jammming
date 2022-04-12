@@ -4,6 +4,7 @@ import TrackList from '../TrackList/TrackList';
 
 export default class SearchResults extends Component {
   render() {
+    console.log(this.props.searchResults)
     return (
       <div className="SearchResults">
         <h2>Results</h2>

@@ -10,26 +10,7 @@ export default class App extends Component {
     super(props);
 
     this.state = {
-      searchResults: [
-        {
-          name: 'example tracks',
-          artist: 'example artist',
-          album: 'example album',
-          id: 12345
-        },
-        {
-          name: 'example tracks1',
-          artist: 'example artist1',
-          album: 'example album1',
-          id: 54321
-        },
-        {
-          name: 'example tracks2',
-          artist: 'example artist2',
-          album: 'example album2',
-          id: 43210
-        }
-      ],
+      searchResults: [],
       playlistName: 'example playlist name',
       playlistTracks: [
         {
@@ -82,15 +63,19 @@ export default class App extends Component {
   } 
   
   savePlaylist() {
-    const trackURIs = this.state.playlistTracks.map(track => track.uri);
+    const trackUris = this.state.playlistTracks.map(track => track.uri);
+    const playlistName = this.state.playlistName;
+    Spotify.savePlaylist(playlistName, trackUris)
   }
 
   search(term) {
-     const response = Spotify.search(term);
-     this.setState({searchResults: response})
+     Spotify.search(term).then(searchResults => {
+      this.setState({searchResults: searchResults});
+     })
   }
 
   render () {
+    console.log(this.state.searchResults)
     return (
       <div>
         <h1>Ja<span className="highlight">mmm</span>ing</h1>
@@ -99,13 +84,13 @@ export default class App extends Component {
             onSearch = {this.search}
           />
           <div className="App-playlist">
-            <SearchResults onAdd={this.addTrack} 
+            <SearchResults 
+              onAdd={this.addTrack} 
               searchResults={this.state.searchResults} 
             />
             <Playlist 
               onNameChange = {this.updatePlaylistName}
               onRemove={this.removeTrack}
-              playlistName={this.state.playlistName} 
               playlistTracks={this.state.playlistTracks} 
               onSave={this.savePlaylist}
             />
@@ -114,6 +99,5 @@ export default class App extends Component {
       </div>
     );
   }
-  
 }
 
