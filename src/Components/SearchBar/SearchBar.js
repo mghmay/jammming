@@ -12,10 +12,13 @@ export default class SearchBar extends Component {
     this.handleTermChange = this.handleTermChange.bind(this);
   }
 
-  handleTermChange(e) {
-    this.setState({ term: e.target.value });
+  handleTermChange(event) {
+    this.setState({
+      term: event.target.value
+    });
   }
-
+  // search needs to be declared here because onSearch requires an argument (term)
+  // we put term into state in this component when the name is changed
   search() {
     this.props.onSearch(this.state.term)
   }

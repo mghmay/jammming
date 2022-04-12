@@ -7,7 +7,8 @@ export default class Track extends Component {
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
   }
-
+  // this component needs methods to add tracks and remove them, it also renders the buttons
+  //so that we can add the songs and remove them
   addTrack() {
     this.props.onAdd(this.props.track);
   }
