@@ -41,31 +41,35 @@ export default class App extends Component {
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
     this.updatePlaylistName = this.updatePlaylistName.bind(this);
+    this.updatePlaylistTracks = this.updatePlaylistTracks.bind(this);
     this.savePlaylist = this.savePlaylist.bind(this);
     this.search = this.search.bind(this);
   }
   //add track to playlist
   addTrack(track) {
     let tracks = this.state.playlistTracks;
-
     //check if the file already exists in the playlist
     if (tracks.find(savedTrack => savedTrack.id === track.id) ) {
       return;
     }
     tracks.push(track);
-    this.setState({playlistTracks: tracks});
+    this.updatePlaylistTracks(tracks);
   }
   // remove track from playlist
   removeTrack(track) {
     let tracks = this.state.playlistTracks;
     // filter the tracks to return only the ones which are not currently selected
     tracks = tracks.filter(currentTrack => currentTrack.id !== track.id); 
-    this.setState({playlistTracks: tracks});
+    this.updatePlaylistTracks(tracks);
   }
   // set the name of the playlist
   updatePlaylistName(name) {
     this.setState({playlistName: name});
   } 
+  // set the tracks of the playlist
+  updatePlaylistTracks(tracks) {
+    this.setState({playlistTracks: tracks});
+  }
   
   savePlaylist() {
     // uris are the unique identifiers for spotify, this selects the uris of all the selected songs
