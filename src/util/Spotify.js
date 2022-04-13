@@ -1,6 +1,7 @@
 const clientID = '71f1f3daefe64e5fadfc2efb9e38536d';
 const redirectURI = 'http://localhost:3000/callback';
 let accessToken;
+let LOCAL_STORAGE_ACCESS_TOKEN = 'jammingApp.accessToken'
 
 const Spotify = {
   getAccessToken() {
