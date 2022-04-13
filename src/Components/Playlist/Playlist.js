@@ -22,7 +22,7 @@ export default class Playlist extends Component {
   render() {
     return (
       <div className="Playlist">
-        <input defaultValue= {'New Playlist'} onChange={this.handleNameChange} />
+        <input value = {this.props.playlistName || 'New playlist'} onChange={this.handleNameChange} />
         <TrackList 
           onRemove={this.props.onRemove}
           tracks={this.props.playlistTracks}

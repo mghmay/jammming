@@ -20,7 +20,7 @@ The layout of the app looks something like this:
 
 */
 
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import './App.css';
 
 import SearchBar from '../SearchBar/SearchBar'
@@ -28,13 +28,15 @@ import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist';
 import Spotify from '../../util/Spotify'
 
+const LOCAL_STORAGE_KEY_TRACKS = 'jammingApp.playlistTracks';
+const LOCAL_STORAGE_KEY_NAME = 'jammingApp.playlistName'
 export default class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       searchResults: [],
-      playlistName: 'New Playlist',
+      playlistName: null,
       playlistTracks: []
     }
     //bind certain methods to this parent so that they will always update the parent
@@ -44,6 +46,26 @@ export default class App extends Component {
     this.updatePlaylistTracks = this.updatePlaylistTracks.bind(this);
     this.savePlaylist = this.savePlaylist.bind(this);
     this.search = this.search.bind(this);
+  }
+  componentDidMount() {
+    const storedTracks =  JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_TRACKS));
+    const storedName = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_NAME));
+    if (storedTracks) {
+      this.updatePlaylistTracks(storedTracks);
+    }
+    if (storedName) {
+      this.updatePlaylistName(storedName)
+    }
+  }
+
+  //push any changes to playlist state to local storage
+  componentDidUpdate(prevState) {
+    if (this.state.playlistName !== prevState.playlistName) {
+      localStorage.setItem(LOCAL_STORAGE_KEY_NAME, JSON.stringify(this.state.playlistName))
+    }
+    if (this.state.playlistTracks !== prevState.playlistTracks) {
+      localStorage.setItem(LOCAL_STORAGE_KEY_TRACKS, JSON.stringify(this.state.playlistTracks))
+    }
   }
   //add track to playlist
   addTrack(track) {
@@ -108,6 +130,8 @@ export default class App extends Component {
             />
             {/* render the playlist component */}
             <Playlist 
+
+              playlistName = {this.state.playlistName}
               // pass any name changes from the component
               onNameChange = {this.updatePlaylistName}
               // these bound parameters allow the child to update the state of the parent
