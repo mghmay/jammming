@@ -20,7 +20,7 @@ The layout of the app looks something like this:
 
 */
 
-import React, { Component, useEffect } from 'react';
+import React, { Component } from 'react';
 import './App.css';
 
 import SearchBar from '../SearchBar/SearchBar'
