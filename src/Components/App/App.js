@@ -30,13 +30,14 @@ import Spotify from '../../util/Spotify'
 
 const LOCAL_STORAGE_KEY_TRACKS = 'jammingApp.playlistTracks';
 const LOCAL_STORAGE_KEY_NAME = 'jammingApp.playlistName'
+
 export default class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       searchResults: [],
-      playlistName: null,
+      playlistName: 'New playlist',
       playlistTracks: []
     }
     //bind certain methods to this parent so that they will always update the parent
