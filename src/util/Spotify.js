@@ -1,12 +1,35 @@
-const clientID = '71f1f3daefe64e5fadfc2efb9e38536d';
-const redirectURI = 'https://www.insidious-force.surge.sh';
-let accessToken;
+const CLIENT_ID = '71f1f3daefe64e5fadfc2efb9e38536d';
+const REDIRECT_URI = 'http://localhost:3000/callback';
+let LOCAL_STORAGE_ACCESS_TOKEN = 'jammingApp.accessToken'
 
 const Spotify = {
+  getStoredAccessToken() {
+    const localAccessToken = localStorage.getItem(LOCAL_STORAGE_ACCESS_TOKEN);
+    if (!localAccessToken) {
+      return false;
+    }
+    const accessToken = JSON.parse(localAccessToken)
+    const now = new Date();
+
+    if (now.getTime() > accessToken.expiry) {
+      localStorage.removeItem(localAccessToken);
+      return false;
+    }
+    return accessToken.value;
+  },
+  storeAccessToken(accessToken, expiresIn) {
+    const now = new Date()
+
+    const item = {
+      value: accessToken,
+      expiry: now.getTime() + expiresIn * 100
+    }
+    localStorage.setItem(LOCAL_STORAGE_ACCESS_TOKEN, JSON.stringify(item))
+  },
   getAccessToken() {
     // return accessToken if present
-    if (accessToken) {
-      return accessToken;
+    if (this.getStoredAccessToken()) {
+      return this.getStoredAccessToken();
     }
     //check for accessToken match in the URL
     const accessTokenMatch = window.location.href.match(/access_token=([^&]*)/);
@@ -14,20 +37,22 @@ const Spotify = {
 
     //if accessToken in the URL return accessToken
     if (accessTokenMatch && expiresInMatch) {
-      accessToken = accessTokenMatch[1];
+      const accessToken = accessTokenMatch[1];
       const expiresIn = Number(expiresInMatch[1]);
-      window.setTimeout(() => accessToken = '', expiresIn * 1000);
-      window.history.pushState('Access Token', null, '/');
-      return accessToken;
+      this.storeAccessToken(accessToken, expiresIn);
+      window.history.pushState("Access Token", null, "/");
+      return this.getStoredAccessToken();
     } else {
       //redirect client to URL where they can retrieve the accessToken
-      const accessURL = `https://accounts.spotify.com/authorize?client_id=${clientID}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectURI}`;
-      window.location = accessURL;
+                         
+      const accessUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&scope=playlist-modify-public&redirect_uri=${REDIRECT_URI}`;
+      window.location = accessUrl;
+      return false;
     }
   },
   async search(term) {
     // need to check for access token with the method every time and save it to a new variable every time!
-    const accessToken = Spotify.getAccessToken();
+    const accessToken = this.getAccessToken();
     try {
       // send the search term to spotify
       const response = await fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`, {
@@ -60,7 +85,7 @@ const Spotify = {
       return;
     }
     //new accessToken again!
-    const accessToken = Spotify.getAccessToken();
+    const accessToken = this.getAccessToken();
     const headers = {
       Authorization: `Bearer ${accessToken}`
     }
